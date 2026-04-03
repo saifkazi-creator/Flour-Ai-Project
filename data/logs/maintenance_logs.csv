@@ -1,0 +1,11 @@
+date,machine,issue,action_taken
+2024-01-10,Roller Mill,Excessive vibration detected,Replaced worn bearings and realigned rollers
+2024-01-15,Conveyor,Belt slippage on incline section,Adjusted belt tension and replaced worn idler rollers
+2024-01-22,Bucket Elevator,Buckets spilling grain at top,Realigned head pulley and replaced 3 damaged buckets
+2024-02-05,Purifier,Sieve blinding causing throughput drop,Cleaned sieves and replaced worn brushes
+2024-02-12,Roller Mill,Grinding gap inconsistency,Recalibrated roll gap using feeler gauge; replaced roll chock liners
+2024-02-20,Conveyor,Motor overheating,Cleaned motor cooling fins; checked and topped up gearbox oil
+2024-03-01,Bucket Elevator,Chain stretch causing skipping,Replaced 2m of worn chain and re-tensioned drive
+2024-03-08,Purifier,Excessive noise from eccentric drive,Lubricated eccentric shaft bearings; tightened loose guard panels
+2024-03-15,Roller Mill,Roll surface glazing reducing extraction,Re-corrugated rollers; adjusted feed rate
+2024-03-22,Conveyor,Idler bearing failure causing belt tracking issue,Replaced 4 failed idler bearings; realigned conveyor frame

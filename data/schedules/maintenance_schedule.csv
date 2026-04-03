@@ -1,0 +1,17 @@
+machine,task,frequency
+Roller Mill,Inspect and lubricate roll bearings,Weekly
+Roller Mill,Check and adjust roll gap,Weekly
+Roller Mill,Inspect roll surface for glazing or wear,Monthly
+Roller Mill,Full disassembly and bearing replacement,Annually
+Conveyor,Inspect belt condition and tension,Weekly
+Conveyor,Lubricate idler and drive bearings,Monthly
+Conveyor,Check motor and gearbox oil levels,Monthly
+Conveyor,Full belt replacement inspection,Annually
+Bucket Elevator,Inspect buckets for cracks or wear,Weekly
+Bucket Elevator,Check chain tension and lubricate,Weekly
+Bucket Elevator,Inspect head and boot pulleys,Monthly
+Bucket Elevator,Full chain replacement assessment,Annually
+Purifier,Clean and inspect sieves,Daily
+Purifier,Lubricate eccentric drive bearings,Weekly
+Purifier,Replace sieve mesh if blocked or torn,Monthly
+Purifier,Full overhaul of eccentric drive,Annually

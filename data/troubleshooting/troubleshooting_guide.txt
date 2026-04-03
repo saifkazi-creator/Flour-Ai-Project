@@ -1,0 +1,103 @@
+Machine: Roller Mill
+Symptom: Excessive vibration
+Possible Causes:
+- Worn or damaged bearings in roll chocks
+- Misalignment of rolls after maintenance
+- Loose foundation bolts
+- Uneven roll surface due to glazing or scoring
+Recommended Actions:
+- Inspect and replace worn bearings
+- Use dial indicator to check roll alignment; adjust chock position
+- Check and torque foundation bolts to spec
+- Inspect roll surface; recorrugate or replace if necessary
+
+Machine: Roller Mill
+Symptom: Poor grinding efficiency / low extraction
+Possible Causes:
+- Roll gap set too wide
+- Glazed or worn roll corrugations
+- Feed rate inconsistency
+- Worn feed roller or feed gate misalignment
+Recommended Actions:
+- Verify and readjust roll gap to product spec
+- Check roll surface; recorrugate if glazed
+- Check feed gate position and product flow
+- Inspect feed roller bearings and replace if worn
+
+Machine: Conveyor
+Symptom: Belt slipping or tracking off-centre
+Possible Causes:
+- Insufficient belt tension
+- Worn or seized idler rollers
+- Off-centre loading
+- Damaged or worn drive pulley lagging
+Recommended Actions:
+- Adjust take-up tensioner to correct belt tension
+- Inspect all idlers; replace seized or damaged units
+- Ensure material is loaded centrally on belt
+- Inspect drive pulley lagging; replace if worn
+
+Machine: Conveyor
+Symptom: Motor overheating
+Possible Causes:
+- Blocked cooling fins on motor
+- Overloaded conveyor beyond motor rating
+- Low gearbox oil level causing extra friction
+- Belt tension too high creating excessive load
+Recommended Actions:
+- Clean motor cooling fins and ensure airflow is not blocked
+- Check conveyor load and reduce if above rated capacity
+- Check and top up gearbox oil to correct level
+- Verify belt tension is within specification
+
+Machine: Bucket Elevator
+Symptom: Buckets spilling grain at discharge
+Possible Causes:
+- Head pulley out of alignment
+- Damaged or missing buckets
+- Belt/chain over-tension causing erratic discharge
+- Discharge spout blocked or misaligned
+Recommended Actions:
+- Check and realign head pulley using laser or straightedge
+- Inspect all buckets; replace damaged or missing units
+- Verify and adjust chain/belt tension
+- Clear and realign discharge spout
+
+Machine: Bucket Elevator
+Symptom: Chain or belt stretch causing skipping
+Possible Causes:
+- Chain wear beyond service limit
+- Incorrect chain tension
+- Sprocket tooth wear
+- Insufficient lubrication
+Recommended Actions:
+- Measure chain pitch; replace if beyond wear limit
+- Adjust drive tension per manufacturer spec
+- Inspect drive and tail sprockets; replace if teeth are hooked or worn
+- Apply correct lubricant to chain at recommended intervals
+
+Machine: Purifier
+Symptom: Sieve blinding / low throughput
+Possible Causes:
+- Sieve mesh clogged with product
+- Worn or stiff brush assemblies not clearing mesh
+- Air suction imbalance
+- Moisture in product causing sticking
+Recommended Actions:
+- Remove and clean all sieve frames; check mesh for tears
+- Inspect brush condition; replace if brushes are worn flat
+- Balance air suction across purifier zones
+- Check product moisture; ensure within spec before processing
+
+Machine: Purifier
+Symptom: Excessive noise from eccentric drive
+Possible Causes:
+- Dry or worn eccentric shaft bearings
+- Loose guard panels vibrating
+- Cracked or loose sieve frame
+- Drive belt worn or misaligned
+Recommended Actions:
+- Lubricate eccentric shaft bearings per schedule
+- Inspect and tighten all guard panel fasteners
+- Check sieve frames for cracks; replace if necessary
+- Inspect drive belt tension and alignment; replace if glazed or cracked
