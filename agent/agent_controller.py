@@ -14,7 +14,6 @@ from rag.llm_engine import stream_llm_answer, stream_llm_direct
 # Module-level memory
 last_context = ""
 
-
 # ─────────────────────────────────────────────
 # INTENT DETECTION
 # ─────────────────────────────────────────────
