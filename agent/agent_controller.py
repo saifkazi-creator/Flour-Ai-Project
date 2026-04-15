@@ -4,7 +4,6 @@ import os
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-
 from tools.manual_tool import manual_search
 from tools.log_tool import log_search
 from tools.schedule_tool import schedule_search
