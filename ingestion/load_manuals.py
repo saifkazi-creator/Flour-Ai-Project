@@ -39,13 +39,13 @@ def load_manuals() -> list:
                 pages = loader.load()
                 chunks = splitter.split_documents(pages)
                 for chunk in chunks:
-                    if len(chunk.page_content.strip()) < 200:
+                    if len(chunk.page_content.strip()) < 50:
                         continue
                     chunk.metadata["type"] = "manual"
                     chunk.metadata["source"] = os.path.basename(full_path)
                     chunk.metadata["folder"] = directory
                     all_docs.append(chunk)
             except Exception as e:
-                print(f"⚠️  Failed to load {filename}: {e}")
+                print(f"[WARNING] Failed to load {filename}: {e}")
 
     return all_docs

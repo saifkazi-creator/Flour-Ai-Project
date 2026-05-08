@@ -9,14 +9,13 @@ def manual_search(query: str, source_filter: str = None) -> list:
     """
     Searches ChromaDB for manual documents.
 
-    NOTE: filter_condition is built but intentionally NOT passed to
-    similarity_search (per spec). Only the base type=manual filter is used.
-    source_filter only constructs the variable for reference.
+    When source_filter is provided (e.g. an uploaded filename), searches that
+    specific source first. Falls back to all manuals if no results are found.
     """
     if vectorstore is None:
         return []
 
-    # Build filter_condition (not used in similarity_search — intentional)
+    # Build the appropriate filter
     if source_filter:
         filter_condition = {
             "$and": [
@@ -25,12 +24,18 @@ def manual_search(query: str, source_filter: str = None) -> list:
             ]
         }
     else:
-        filter_condition = {"type": {"$eq": "manual"}}  # noqa: F841
+        filter_condition = {"type": {"$eq": "manual"}}
 
-    # Always use only the base type filter
+    # Search with the full filter (including source if provided)
     results = vectorstore.similarity_search(
-        query, k=6, filter={"type": {"$eq": "manual"}}
+        query, k=6, filter=filter_condition
     )
+
+    # If source-specific search returned nothing, fall back to all manuals
+    if not results and source_filter:
+        results = vectorstore.similarity_search(
+            query, k=6, filter={"type": {"$eq": "manual"}}
+        )
 
     # Post-filter: exclude docs that look like troubleshooting entries
     filtered = [

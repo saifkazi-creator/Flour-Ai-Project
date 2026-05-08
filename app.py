@@ -67,22 +67,50 @@ st.sidebar.markdown("""
 - 📊 Confidence Scoring
 """)
 
-# File uploader
+# File uploader — key changes after each upload so the widget auto-clears
+if "upload_counter" not in st.session_state:
+    st.session_state["upload_counter"] = 0
+if "ingested_files" not in st.session_state:
+    st.session_state["ingested_files"] = set()
+
 uploaded_file = st.sidebar.file_uploader(
-    "📂 Upload Document", type=["pdf", "csv", "txt"]
+    "📂 Upload Document", type=["pdf", "csv", "txt"],
+    key=f"file_uploader_{st.session_state['upload_counter']}"
 )
 if uploaded_file is not None:
     upload_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "uploads")
     os.makedirs(upload_dir, exist_ok=True)
     save_path = os.path.join(upload_dir, uploaded_file.name)
-    with open(save_path, "wb") as f:
-        f.write(uploaded_file.read())
-    st.session_state["last_uploaded_file"] = uploaded_file.name
-    st.sidebar.success(f"✅ Uploaded: {uploaded_file.name}")
+
+    if uploaded_file.name not in st.session_state["ingested_files"]:
+        with open(save_path, "wb") as f:
+            f.write(uploaded_file.read())
+        st.session_state["last_uploaded_file"] = uploaded_file.name
+
+        # Auto-ingest: rebuild the vector store with the new file included,
+        # then reload the in-memory vectorstore so the agent sees it immediately.
+        with st.spinner("🔄 Ingesting uploaded document into knowledge base..."):
+            from ingestion.build_vector_store import build_vector_store
+            from rag.retriever import reload_vectorstore
+            build_vector_store()
+            reload_vectorstore()
+
+        st.session_state["ingested_files"].add(uploaded_file.name)
+        st.sidebar.success(f"✅ Uploaded & ingested: {uploaded_file.name}")
+
+        # Increment counter to reset the file uploader widget for next upload
+        st.session_state["upload_counter"] += 1
+        st.rerun()
+    else:
+        st.sidebar.info(f"📄 Already ingested: {uploaded_file.name}")
 
 # Rebuild knowledge base button
 if st.sidebar.button("🔄 Rebuild AI Knowledge Base"):
-    os.system("python ingestion/build_vector_store.py")
+    with st.spinner("🔄 Rebuilding knowledge base..."):
+        from ingestion.build_vector_store import build_vector_store
+        from rag.retriever import reload_vectorstore
+        build_vector_store()
+        reload_vectorstore()
     st.sidebar.success("✅ Knowledge base rebuilt!")
 
 # List uploaded files

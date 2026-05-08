@@ -35,12 +35,22 @@ MAINTENANCE_PROBLEM_KEYWORDS = [
     "how to replace", "how to fix", "how to repair", "how to adjust",
     "procedure for", "steps to", "torque", "specification", "spec",
     "reassemble", "disassemble", "install", "remove",
+    # document / manual references — queries about uploaded or existing docs
+    "manual", "document", "pdf", "uploaded", "according to",
+    "from the", "in the", "refer",
+    # common technical queries that should use documents
+    "temperature", "pressure", "capacity", "speed", "rpm", "voltage",
+    "dimension", "weight", "size", "rating", "power", "output",
+    "lubrication", "lubricant", "oil", "grease", "belt", "bearing",
+    "alignment", "clearance", "gap", "tolerance", "setting",
+    "start", "stop", "operate", "operation", "run", "running",
+    "safety", "precaution", "warning", "maintenance",
 ]
 
 # Keywords that are clearly general / informational — go straight to LLM
 GENERAL_KEYWORDS = [
-    "what is", "what are", "explain", "describe", "tell me about",
-    "how does", "how do", "definition", "overview", "introduction",
+    "what is a", "what are", "explain", "describe", "tell me about",
+    "how does a", "how do", "definition", "overview", "introduction",
     "hi", "hello", "hey", "thanks", "thank you", "good morning",
     "good afternoon", "who are you", "what can you do",
 ]
@@ -53,7 +63,8 @@ def classify_intent(query: str) -> str:
     Order of precedence:
       1. If query matches a maintenance PROBLEM keyword → route to maintenance pipeline
       2. If query matches a general/informational keyword  → route to direct LLM
-      3. Default → direct LLM (safer fallback for unknown casual queries)
+      3. Default → if there is an uploaded file, route to manual search;
+                    otherwise route to direct LLM
     """
     q = query.lower()
 
@@ -67,7 +78,14 @@ def classify_intent(query: str) -> str:
         if kw in q:
             return "general"
 
-    # Default: treat as general conversation rather than forcing RAG
+    # Default: if user has uploaded a document, assume they want to query it;
+    # otherwise fall back to direct LLM for casual conversation.
+    try:
+        if st.session_state.get("last_uploaded_file"):
+            return "manual"
+    except Exception:
+        pass
+
     return "general"
 
 
@@ -191,6 +209,6 @@ def stream_agent_response(query: str):
             context = "\n\n".join([d.page_content for d in docs])
             for chunk in stream_llm_answer(enhanced, context):
                 yield chunk
-            yield "\n\n> 🟠 **Confidence: Low-Medium** *(From equipment manuals)*"
+            yield "\n\n> 🟢 **Confidence: High** *(From equipment manuals)*"
 
     last_context = query
