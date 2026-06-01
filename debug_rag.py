@@ -55,14 +55,10 @@ for d in docs:
 
 # 3. Test vectorstore search
 print("\n[4] TESTING VECTORSTORE SEARCH:")
-from langchain_community.vectorstores import Chroma
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from rag.retriever import get_vectorstore
+vs = get_vectorstore()
 
-persist_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "vectorstore")
-embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-
-if os.path.exists(persist_dir):
-    vs = Chroma(persist_directory=persist_dir, embedding_function=embeddings)
+if vs is not None:
     collection = vs._collection
     total = collection.count()
     print(f"  Total docs in vectorstore: {total}")
@@ -107,7 +103,7 @@ if os.path.exists(persist_dir):
         preview = r.page_content[:120].replace("\n", " ")
         print(f"  [{i+1}] source={src} | {preview}...")
 else:
-    print("  Vectorstore directory does not exist!")
+    print("  Vectorstore could not be loaded!")
 
 print("\n" + "=" * 60)
 print("DIAGNOSTIC COMPLETE")

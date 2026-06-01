@@ -2,7 +2,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from rag.retriever import vectorstore
+from rag.retriever import get_vectorstore
 
 
 def manual_search(query: str, source_filter: str = None) -> list:
@@ -12,6 +12,7 @@ def manual_search(query: str, source_filter: str = None) -> list:
     When source_filter is provided (e.g. an uploaded filename), searches that
     specific source first. Falls back to all manuals if no results are found.
     """
+    vectorstore = get_vectorstore()
     if vectorstore is None:
         return []
 

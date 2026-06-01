@@ -66,7 +66,12 @@ def classify_intent(query: str) -> str:
       3. Default → if there is an uploaded file, route to manual search;
                     otherwise route to direct LLM
     """
-    q = query.lower()
+    q = query.lower().strip()
+
+    # Check if they are confirming resolution
+    resolution_keywords = ["resolved", "solved", "fixed it", "now working", "working now", "got it working", "issue is resolved", "problem solved"]
+    if len(q) < 60 and any(kw in q for kw in resolution_keywords):
+        return "resolved"
 
     # Check problem / maintenance intent first
     for kw in MAINTENANCE_PROBLEM_KEYWORDS:
@@ -145,6 +150,11 @@ def stream_agent_response(query: str):
         yield "💬 **Assistant:**\n\n"
         for chunk in stream_llm_direct(enhanced):
             yield chunk
+
+    # ── Resolved ──────────────────────────────────────────────────────────
+    elif intent == "resolved":
+        yield "✅ **Status: Resolved**\n\n"
+        yield "Glad to hear the issue has been resolved! If you want to log this solution for future troubleshooting lookup, please expand the **Save Resolved Issue to Logs** section in the sidebar to review and save the details."
 
     # ── Maintenance logs ──────────────────────────────────────────────────
     elif intent == "log":

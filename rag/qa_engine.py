@@ -2,7 +2,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from rag.retriever import vectorstore
+from rag.retriever import get_vectorstore
 
 
 def answer_question(question: str) -> str:
@@ -10,6 +10,7 @@ def answer_question(question: str) -> str:
     Retrieves top-6 docs from the vectorstore and formats them by type.
     Returns a deduplicated string of relevant answers.
     """
+    vectorstore = get_vectorstore()
     if vectorstore is None:
         return "Vectorstore not initialised. Run ingestion/build_vector_store.py first."
 

@@ -1,48 +1,68 @@
 import os
-from langchain_community.vectorstores import Chroma
-from langchain_community.embeddings import HuggingFaceEmbeddings
+import streamlit as st
 
 PERSIST_DIR = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "vectorstore"
 )
 EMBED_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 
-# Module-level singletons
-embeddings = HuggingFaceEmbeddings(model_name=EMBED_MODEL)
+@st.cache_resource
+def get_embeddings():
+    """
+    Lazy loads and caches the HuggingFace embeddings model.
+    """
+    from langchain_community.embeddings import HuggingFaceEmbeddings
+    return HuggingFaceEmbeddings(model_name=EMBED_MODEL)
 
+@st.cache_resource
+def get_vectorstore():
+    """
+    Lazy loads and builds the Chroma vector store in-memory from the source files.
+    This bypasses the Windows/Python 3.13 SQLite Rust panic and file-locking issues.
+    """
+    from langchain_community.vectorstores import Chroma
+    from ingestion.load_manuals import load_manuals
+    from ingestion.load_logs import load_logs
+    from ingestion.load_schedule import load_schedule
+    from ingestion.load_troubleshooting import load_troubleshooting
 
-def _load_vectorstore():
-    if os.path.exists(PERSIST_DIR):
-        return Chroma(persist_directory=PERSIST_DIR, embedding_function=embeddings)
-    return None
+    # Load all documents from files
+    manual_docs = load_manuals()
+    log_docs = load_logs()
+    schedule_docs = load_schedule()
+    troubleshooting_docs = load_troubleshooting()
 
+    all_docs = manual_docs + log_docs + schedule_docs + troubleshooting_docs
+    embeddings = get_embeddings()
 
-vectorstore = _load_vectorstore()
-retriever = vectorstore.as_retriever(search_kwargs={"k": 4}) if vectorstore else None
-
+    # Build the Chroma database in-memory
+    vectorstore = Chroma.from_documents(
+        documents=all_docs,
+        embedding=embeddings
+    )
+    return vectorstore
 
 def get_retriever():
-    return retriever
-
+    """
+    Returns the vectorstore formatted as a retriever.
+    """
+    vs = get_vectorstore()
+    return vs.as_retriever(search_kwargs={"k": 4}) if vs else None
 
 def reload_vectorstore():
     """
-    Re-create the vectorstore and retriever singletons from the persisted
-    ChromaDB directory.  Call this after ingestion / rebuild so the running
-    app picks up newly added documents.
+    Clears the cached vectorstore and embeddings. They will be rebuilt
+    automatically on the next retrieval request.
     """
-    global vectorstore, retriever
-    vectorstore = _load_vectorstore()
-    retriever = vectorstore.as_retriever(search_kwargs={"k": 4}) if vectorstore else None
+    get_vectorstore.clear()
+    get_embeddings.clear()
 
-    # Also update the references held by every tool module that already
-    # imported `vectorstore` at the top level.
-    import tools.manual_tool as _mt
-    import tools.log_tool as _lt
-    import tools.schedule_tool as _st
-    import tools.troubleshooting_tool as _tt
-    import rag.qa_engine as _qa
-
-    for mod in (_mt, _lt, _st, _tt, _qa):
-        mod.vectorstore = vectorstore
-
+# Dynamic module-level attribute lookup for backward compatibility
+def __getattr__(name):
+    if name == "vectorstore":
+        return get_vectorstore()
+    if name == "embeddings":
+        return get_embeddings()
+    if name == "retriever":
+        return get_retriever()
+    raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
